@@ -1,8 +1,37 @@
 import os
 import json
 import opendataloader_pdf
+import logging
 from typing import List, Dict, Any
 from models import FlattenedElement
+
+logger = logging.getLogger(__name__)
+
+
+def extract_metadata(pdf_path: str) -> Dict[str, Any]:
+    """
+    Extract basic metadata (title, author) from a PDF file.
+    Uses PyPDF2 as it's lightweight and doesn't need Java.
+    Falls back gracefully if metadata is missing.
+    """
+    metadata = {"title": None, "author": None}
+    try:
+        from PyPDF2 import PdfReader
+        reader = PdfReader(pdf_path)
+        info = reader.metadata
+        if info:
+            raw_title = info.get("/Title", "") or ""
+            raw_author = info.get("/Author", "") or ""
+            # Only use if it looks like a real title (not a filename or UUID)
+            if raw_title and len(raw_title) > 2 and not raw_title.endswith(".pdf"):
+                metadata["title"] = raw_title.strip()
+            if raw_author and len(raw_author) > 1:
+                metadata["author"] = raw_author.strip()
+    except ImportError:
+        logger.warning("PyPDF2 not installed. Skipping metadata extraction.")
+    except Exception as e:
+        logger.warning(f"Failed to extract metadata: {e}")
+    return metadata
 
 def extract_elements(pdf_path: str, output_dir: str) -> List[FlattenedElement]:
     """

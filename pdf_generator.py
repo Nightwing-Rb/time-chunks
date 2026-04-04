@@ -189,12 +189,16 @@ def generate_single_pdf(chunks: List[Chunk]) -> io.BytesIO:
                     img_buffer = io.BytesIO(img_bytes)
                     img = Image(img_buffer)
                     
-                    # Constrain image size to page width margins
-                    avail_width = doc.width
-                    if img.drawWidth > avail_width:
-                        scaling_factor = avail_width / img.drawWidth
-                        img.drawWidth = avail_width
-                        img.drawHeight = img.drawHeight * scaling_factor
+                    # Constrain image size to fit within page frame (width AND height)
+                    # Subtract default Frame padding (6pt per side) so we match
+                    # the real usable area (456 x 636 for letter with 72pt margins)
+                    avail_width = doc.width - 12
+                    avail_height = doc.height - 12
+                    scale_w = min(1, avail_width / img.drawWidth)
+                    scale_h = min(1, avail_height / img.drawHeight)
+                    scale = min(scale_w, scale_h)
+                    img.drawWidth *= scale
+                    img.drawHeight *= scale
                         
                     story.append(Spacer(1, 10))
                     story.append(img)
