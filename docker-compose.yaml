@@ -3,8 +3,9 @@ services:
     build: .
     image: time-chunks
     ports:
-      - "8000:8000"
+      - "0.0.0.0:8000:8000"
     volumes:
       - .:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - API_KEY=${API_KEY:-dev-key-change-me}

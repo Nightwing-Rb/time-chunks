@@ -22,6 +22,16 @@ A FastAPI-based microservice that extracts text from PDF documents and chunks th
     docker-compose up
     ```
 3.  **Verify**: Open `http://localhost:8000/api/health`
+4.  **Mobile Access**: Both your phone and computer must be on the **same Wi-Fi network**. Use your computer's local IP address (e.g., `192.168.0.39`) to access the API from your phone: `http://192.168.0.39:8000/api/health`
+
+## Mobile Connectivity Guide
+
+To access the API from a mobile device or a physical Android/iOS device:
+
+1.  **Network**: Connect both your phone and PC to the same Wi-Fi.
+2.  **Local IP**: Find your PC's local IP. On Windows, run `ipconfig` and look for the IPv4 Address under the Wi-Fi adapter (e.g., `192.168.0.39`).
+3.  **URL**: Use `http://<YOUR_LOCAL_IP>:8000` as the base URL.
+4.  **Firewall**: Ensure your Windows Firewall allows inbound connections on port `8000`. You may need to create an Inbound Rule in Windows Defender Firewall for TCP port 8000.
 
 ## API Endpoints
 

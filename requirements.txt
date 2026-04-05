@@ -4,3 +4,8 @@ pydantic
 python-multipart
 opendataloader-pdf
 reportlab
+pypdf2
+
+# Test dependencies
+fpdf
+requests

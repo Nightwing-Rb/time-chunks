@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: time-chunks
+    env: docker
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: API_KEY
+        sync: false
+      - key: PYTHONUNBUFFERED
+        value: "1"
